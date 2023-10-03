@@ -1,25 +1,50 @@
-import logo from './logo.svg';
-import './App.css';
+import React, { useState, useEffect } from 'react';
+import Cookies from 'js-cookie';
+import { BrowserRouter as Router, Route,Routes, Navigate  } from 'react-router-dom';
+import Login from './Login';
+import Logout from './Logout';
+import "./App.css";
 
-function App() {
+const App = () => {
+  const [loggedIn, setLoggedIn] = useState(false);
+
+  useEffect(() => {
+    const isUserLoggedIn = Cookies.get('loggedIn') === 'true';
+    setLoggedIn(isUserLoggedIn);
+  }, []);
+
+  const handleLogin = () => {
+    setLoggedIn(true);
+    Cookies.set('loggedIn', 'true', { expires: 1 });
+  };
+
+  const handleLogout = () => {
+    setLoggedIn(false);
+    Cookies.remove('loggedIn');
+  };
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div className='main'>
+      <Router>
+        <Routes>
+        <Route
+          path="/"
+          element={loggedIn ? <Navigate to="/logout" /> : <Navigate to="/login" />}
+        />
+      <Route
+        exact
+        path="/login"
+        element={loggedIn ? <Navigate to="/logout" /> : <Login onLogin={handleLogin} />}
+      />
+      <Route
+        exact
+        path="/logout"
+        element={loggedIn ? <Logout onLogout={handleLogout} /> : <Navigate to="/login" />}
+      />
+      </Routes>
+    </Router>
     </div>
   );
-}
+};
 
 export default App;
