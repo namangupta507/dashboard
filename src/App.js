@@ -28,17 +28,17 @@ const App = () => {
       <Router>
         <Routes>
         <Route
-          path="/"
+          path=""
           element={loggedIn ? <Navigate to="/logout" /> : <Navigate to="/login" />}
         />
       <Route
         exact
-        path="/login"
+        path="login"
         element={loggedIn ? <Navigate to="/logout" /> : <Login onLogin={handleLogin} />}
       />
       <Route
         exact
-        path="/logout"
+        path="logout"
         element={loggedIn ? <Logout onLogout={handleLogout} /> : <Navigate to="/login" />}
       />
       </Routes>
